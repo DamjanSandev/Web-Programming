@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game - Black Cards</title>
+    <style>
+        .game-container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 330px;
+            gap: 10px;
+        }
+        .card {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .card.black {
+            background-color: black;
+        }
+        .card.red {
+            background-color: red;
+        }
+        .score {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <h2>Memory Game - Find the Black Cards</h2>
+    <p>Score: <span id="score">0</span></p>
+    <div class="game-container" id="gameContainer"></div>
+</div>
+
+<script>
+
+    const gameContainer = document.getElementById('gameContainer');
+    const scoreDisplay = document.getElementById('score');
+    let score = 0;
+    let blackCards = [];
+    let correctClicks = 0;
+    let incorrectClicks = 0;
+
+    function initializeGame() {
+        gameContainer.innerHTML = '';
+        blackCards = [];
+        correctClicks = 0;
+        incorrectClicks = 0;
+
+        // Make the 3x3 grid
+        for (let i = 0; i < 9; i++) {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.index = i; // This is what makes it check when you click on it
+            card.addEventListener('click', handleCardClick); // This adds
+            // the ability to click and handle the  logic on the click
+            gameContainer.appendChild(card);
+        }
+
+        // Randomly add 3 black cards
+        while (blackCards.length < 3) {
+            const randomIndex = Math.floor(Math.random() * 9);
+            if (!blackCards.includes(randomIndex)) {
+                blackCards.push(randomIndex);
+                gameContainer.children[randomIndex].classList.add('black');
+            }
+        }
+
+        // Show cards for 3 seconds
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('black');
+                card.style.backgroundColor = 'white';
+            });
+        }, 5000);
+    }
+
+    function handleCardClick(event) {
+        const clickedCard = event.target;
+        const index = parseInt(clickedCard.dataset.index);
+
+        if (blackCards.includes(index)) {
+            if (!clickedCard.classList.contains('black-found')) {
+                clickedCard.classList.add('black-found');
+                clickedCard.style.backgroundColor = 'black';
+                score++;
+                correctClicks++;
+            }
+        } else {
+            clickedCard.classList.add('red');
+            score--;
+            incorrectClicks++;
+            setTimeout(() => clickedCard.classList.remove('red'), 200);
+        }
+
+        // Update score
+        scoreDisplay.textContent = score;
+
+        // Check if game is over
+        if (correctClicks === blackCards.length || (correctClicks - incorrectClicks) < 0) {
+            setTimeout(() => {
+                alert(`Game Over! Final Score: ${score}`);
+                initializeGame();
+            }, 200);
+        }
+    }
+
+    initializeGame();
+</script>
+</body>
+</html>

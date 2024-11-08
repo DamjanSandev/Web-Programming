@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<div>
+    <h1>Categories Page</h1>
+    <a th:href="@{/hello}">Home</a>
+    <h2>
+        <th:block th:text="'Hello ' + ${ipAddress}"></th:block>
+    </h2>
+    <p>
+        <th:block th:text="'User Agent ' + ${userAgent}"></th:block>
+    </p>
+
+    <h3>
+        Categories:
+    </h3>
+
+    <ul>
+        <li th:each="category: ${categories}" th:text="${category.name} + ' (' + ${category.description} + ')'"></li>
+    </ul>
+
+    <div>
+        <h3>
+            Enter a new category
+        </h3>
+
+        <form th:action="@{/servlet/category}" th:method="POST">
+            <label>
+                Name
+                <input type="text" name="name" />
+            </label>
+
+            <br />
+
+            <label>
+                Description
+                <input type="text" name="description" />
+            </label>
+
+            <br />
+
+            <button type="submit">
+                Add
+            </button>
+
+        </form>
+    </div>
+
+</div>
+</body>
+</html>
