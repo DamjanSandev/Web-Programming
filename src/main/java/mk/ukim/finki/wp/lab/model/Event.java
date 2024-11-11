@@ -10,6 +10,7 @@ public class Event {
     private String description;
     private double popularityScore;
     private Location location;
+    private boolean disabled;
 
     public Event(String name, String description, double popularityScore, Location location) {
         this.name = name;
@@ -17,5 +18,6 @@ public class Event {
         this.popularityScore = popularityScore;
         this.id = (long) (Math.random() * 1000);
         this.location = location;
+        this.disabled = false;
     }
 }

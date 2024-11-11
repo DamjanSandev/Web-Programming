@@ -60,6 +60,7 @@ public class EventController {
         model.addAttribute("event", e);
         return "add-event";
     }
+
     @GetMapping("/addEvent")
     public String addEvent(Model model) {
         model.addAttribute("locations", locationService.findAll());
@@ -87,4 +88,16 @@ public class EventController {
         this.eventService.deleteEvent(id);
         return "redirect:/events";
     }
+
+    @PostMapping("/like/{id}")
+    public String likeEvent(@PathVariable Long id, Model model) {
+        Optional<Event> e = eventService.findById(id);
+        if (e.isPresent()) {
+            Event ev = e.get();
+            ev.setDisabled(true);
+            ev.setPopularityScore(ev.getPopularityScore() + 1);
+        }
+        return "redirect:/events";
+    }
+
 }

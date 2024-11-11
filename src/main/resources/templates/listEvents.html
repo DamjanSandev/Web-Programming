@@ -106,16 +106,23 @@
                     <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-info btn-sm float-right ml-2">Edit</a>
                     <a th:href="@{events/delete/{id}(id=${event.id})}"
                        class="btn btn-danger btn-sm float-right">Delete</a>
-
-                    <form th:action="@{/eventBooking/confirm}" method="POST" class="form-inline float-right ml-2">
-                        <div class="form-group mr-2">
-                            <label for="numTickets-${event.id}" class="mr-2">Tickets:</label>
-                            <input type="number" id="numTickets-${event.id}" name="numTickets" class="form-control"
-                                   min="1" max="10">
-                        </div>
-                        <input type="hidden" name="eventName" th:value="${event.name}">
-                        <button type="submit" class="btn btn-success btn-sm">Book</button>
+                    <form th:action="@{events/like/{id}(id=${event.id})}" method="POST" class="form-inline float-right ml-2">
+                        <button type="submit" class="btn btn-success btn-sm"
+                        th:disabled="${event.disabled}">Like</button>
                     </form>
+
+                    <div style="display: block">
+
+                        <form th:action="@{/eventBooking/confirm}" method="POST" class="form-inline float-right ml-2">
+                            <div class="form-group mr-2">
+                                <label for="numTickets-${event.id}" class="mr-2">Tickets:</label>
+                                <input type="number" id="numTickets-${event.id}" name="numTickets" class="form-control"
+                                       min="1" max="10">
+                            </div>
+                            <input type="hidden" name="eventName" th:value="${event.name}">
+                            <button type="submit" class="btn btn-success btn-sm">Book</button>
+                        </form>
+                    </div>
                 </li>
             </ul>
         </div>
