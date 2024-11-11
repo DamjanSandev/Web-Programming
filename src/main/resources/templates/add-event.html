@@ -3,36 +3,37 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Event</title>
+    <title th:value="${event==null} ? 'Add Event' : 'Edit Event'"></title>
+
     <!-- Link to Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-5">
     <header class="text-center mb-4">
-        <h1>Edit Event</h1>
+        <h3 th:text="${event==null} ? 'Add Event' : 'Edit Event'"></h3>
     </header>
 
     <main>
-        <form action="/events/update" method="post">
-            <input type="hidden" name="id" th:value="${event.getId()}"/>
+        <form th:action="@{${event!=null} ? '/events/update/' + ${event.id} : '/events/add'}" th:method="post">
+            <input type="hidden" name="id" th:value="${event?.getId()}"/>
 
             <!-- Event Name -->
             <div class="form-group">
                 <label for="name">Event Name:</label>
-                <input type="text" id="name" name="name" th:value="${event.name}" class="form-control" required />
+                <input type="text" id="name" name="name" th:value="${event?.name}" class="form-control" required />
             </div>
 
             <!-- Event Description -->
             <div class="form-group">
                 <label for="description">Event Description:</label>
-                <textarea id="description" name="description" class="form-control" required th:text="${event.description}"></textarea>
+                <textarea id="description" name="description" class="form-control" required th:text="${event?.description}"></textarea>
             </div>
 
             <!-- Popularity Score -->
             <div class="form-group">
                 <label for="popularityScore">Popularity Score:</label>
-                <input type="number" id="popularityScore" name="popularityScore" th:value="${event.popularityScore}" class="form-control" required />
+                <input type="number" id="popularityScore" name="popularityScore" th:value="${event?.popularityScore}" class="form-control" required />
             </div>
 
             <!-- Select Location -->
@@ -40,9 +41,8 @@
                 <label for="locationId">Select Location:</label>
                 <select id="locationId" name="locationId" class="form-control">
                     <option value="" disabled>Select a location</option>
-                    <th:block th:each="location : ${locations}">
-                        <option th:value="${location.id}" th:text="${location.name}"></option>
-                    </th:block>
+                    <option th:each="location : ${locations}" th:value="${location?.id}" th:text="${location?.name}">
+                    </option>
                 </select>
             </div>
 

@@ -2,34 +2,91 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking - Confirmation</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         body {
-            width: 800px;
-            margin: auto;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
         }
+
+        section {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 50px auto;
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+
         table {
-            width:100%;
+            width: 100%;
+            margin-top: 20px;
         }
-        table, td, th {
-            border: 1px solid black;
-            padding: 3px 2px;
+
+        table th {
+            background-color: #007bff;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        table td {
+            text-align: left;
+            padding: 12px;
+            font-size: 16px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table td b {
+            color: #007bff;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-btn {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
 <section>
     <header>
-        <h1>Event Booking page - Booking confirmation </h1>
+        <h1>Event Booking - Booking Confirmation</h1>
     </header>
-    <table>
+
+    <table class="table table-bordered">
         <tr>
-            <th colspan="2">
-                Your Booking Status
-            </th>
+            <th colspan="2">Your Booking Status</th>
         </tr>
         <tr>
-            <td><b>Attendee Name </b></td>
+            <td><b>Attendee Name</b></td>
             <td>Petko Petkov</td>
         </tr>
         <tr>
@@ -38,13 +95,21 @@
         </tr>
         <tr>
             <td><b>Booking for Event</b></td>
-            <td>Oppenheimer</td>
+            <td th:text="${eventName}">Event Name Here</td>
         </tr>
         <tr>
-            <td><b>Number of tickets</b></td>
-            <td>2</td>
+            <td><b>Number of Tickets</b></td>
+            <td th:text="${numTickets}">1</td>
         </tr>
     </table>
+
+    <div class="button-container">
+        <a href="/events" class="back-btn">Back to Events</a>
+    </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

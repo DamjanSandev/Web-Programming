@@ -3,7 +3,6 @@ package mk.ukim.finki.wp.lab.web.controller;
 
 import mk.ukim.finki.wp.lab.model.Event;
 import mk.ukim.finki.wp.lab.model.Location;
-import mk.ukim.finki.wp.lab.model.exception.LocationNotFoundException;
 import mk.ukim.finki.wp.lab.service.EventService;
 import mk.ukim.finki.wp.lab.service.LocationService;
 import org.springframework.stereotype.Controller;
@@ -23,6 +22,7 @@ public class EventController {
         this.eventService = eventService;
         this.locationService = locationService;
     }
+
 
     @GetMapping
     public String getEventsPage(@RequestParam(required = false) String error, Model model) {
@@ -47,7 +47,7 @@ public class EventController {
 
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/addEvent/{id}")
     public String editEvent(@PathVariable Long id, Model model) {
         Optional<Event> event = this.eventService.findById(id);
         if (event.isEmpty()) {
@@ -58,11 +58,16 @@ public class EventController {
         List<Location> locations = locationService.findAll();
         model.addAttribute("locations", locations);
         model.addAttribute("event", e);
-        return "editEvent";
+        return "add-event";
+    }
+    @GetMapping("/addEvent")
+    public String addEvent(Model model) {
+        model.addAttribute("locations", locationService.findAll());
+        return "add-event";
     }
 
-    @PostMapping("/update")
-    public String updateEvent(@RequestParam Long id,
+    @PostMapping("/update/{id}")
+    public String updateEvent(@PathVariable Long id,
                               @RequestParam String name,
                               @RequestParam String description,
                               @RequestParam double popularityScore,

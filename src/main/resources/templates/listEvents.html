@@ -10,14 +10,36 @@
         body {
             margin-top: 20px;
         }
+
         .container {
             max-width: 900px;
         }
+
         .event-item {
             margin-bottom: 15px;
         }
+
         .event-item .edit-button, .event-item .delete-button {
             margin-right: 10px;
+        }
+
+        .add-event-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            align-content: center;
+            margin-top: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-event-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -28,10 +50,12 @@
     </header>
 
     <main>
+        <div th:if="${error}" style="color: red;font-weight: bold">
+            <p th:text="${error}"></p>
+        </div>
         <!-- Search Filters -->
         <div class="row mb-4">
             <div class="col-12">
-                <h2>Choose an event:</h2>
                 <form th:action="@{/test}" th:method="GET" class="form-inline">
                     <button type="submit" class="btn btn-secondary">Reset List</button>
                 </form>
@@ -79,45 +103,26 @@
             <ul class="list-group mb-4">
                 <li th:each="event : ${events}" class="list-group-item event-item">
                     <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()}"></span>
-                    <a th:href="@{/events/edit/{id}(id=${event.id})}" class="btn btn-info btn-sm float-right ml-2">Edit</a>
-                    <a th:href="@{events/delete/{id}(id=${event.id})}" class="btn btn-danger btn-sm float-right">Delete</a>
+                    <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-info btn-sm float-right ml-2">Edit</a>
+                    <a th:href="@{events/delete/{id}(id=${event.id})}"
+                       class="btn btn-danger btn-sm float-right">Delete</a>
+
+                    <form th:action="@{/eventBooking/confirm}" method="POST" class="form-inline float-right ml-2">
+                        <div class="form-group mr-2">
+                            <label for="numTickets-${event.id}" class="mr-2">Tickets:</label>
+                            <input type="number" id="numTickets-${event.id}" name="numTickets" class="form-control"
+                                   min="1" max="10">
+                        </div>
+                        <input type="hidden" name="eventName" th:value="${event.name}">
+                        <button type="submit" class="btn btn-success btn-sm">Book</button>
+                    </form>
                 </li>
             </ul>
         </div>
-
-        <!-- Add Event Form -->
-        <div class="mt-5">
-            <h3>Add New Event</h3>
-            <form action="/events/add" method="post" class="form">
-                <div class="form-group">
-                    <label for="name">Event Name:</label>
-                    <input type="text" id="name" name="name" class="form-control" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Event Description:</label>
-                    <textarea id="description" name="description" class="form-control" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="popularityScore">Popularity Score:</label>
-                    <input type="number" id="popularityScore" name="popularityScore" class="form-control" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="locationId">Select Location:</label>
-                    <select id="locationId" name="locationId" class="form-control">
-                        <option value="" disabled selected>Select a location</option>
-                        <th:block th:each="location : ${locations}">
-                            <option th:value="${location.id}" th:text="${location.name}"></option>
-                        </th:block>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-success">Save Event</button>
-            </form>
-        </div>
     </main>
+
+    <!-- Add Event Button -->
+    <a href="/events/addEvent" class="add-event-button">Add Event</a>
 </div>
 
 <!-- Link to Bootstrap JS (with dependencies) -->
