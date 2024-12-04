@@ -1,10 +1,12 @@
 package mk.ukim.finki.wp.lab.service.impl;
 
+import mk.ukim.finki.wp.lab.model.Category;
 import mk.ukim.finki.wp.lab.model.Event;
 import mk.ukim.finki.wp.lab.model.Location;
 import mk.ukim.finki.wp.lab.model.exception.LocationNotFoundException;
-import mk.ukim.finki.wp.lab.repository.EventRepository;
-import mk.ukim.finki.wp.lab.repository.LocationRepository;
+import mk.ukim.finki.wp.lab.repository.jpa.CategoryRepository;
+import mk.ukim.finki.wp.lab.repository.jpa.EventRepository;
+import mk.ukim.finki.wp.lab.repository.jpa.LocationRepository;
 import mk.ukim.finki.wp.lab.service.EventService;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,13 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final LocationRepository locationRepository;
+    private final CategoryRepository categoryRepository;
 
 
-    public EventServiceImpl(EventRepository eventRepository, LocationRepository locationRepository) {
+    public EventServiceImpl(EventRepository eventRepository, LocationRepository LocationRepository, CategoryRepository categoryRepository) {
         this.eventRepository = eventRepository;
-        this.locationRepository = locationRepository;
+        this.locationRepository = LocationRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -30,13 +34,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> searchEvent(String text) {
-        return this.eventRepository.searchEvents(text);
+        return this.eventRepository.findByNameLike(text);
     }
 
     @Override
-    public Optional<Event> save(String name, String description, Double score, Long locationId) {
+    public Optional<Event> save(String name, String description, Double score, Long locationId, Long categoryId) {
         Location location = locationRepository.findById(locationId).orElseThrow(() -> new LocationNotFoundException(locationId));
-        return this.eventRepository.save(name, description, score, location);
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        return Optional.of(this.eventRepository.save(new Event(name, description, score, location, category.get())));
     }
 
     @Override
@@ -45,14 +50,24 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void updateEvent(Long eventid, String name, String description, Double score, Long locationId) {
+    public void updateEvent(Long eventid, String name, String description, Double score, Long locationId, Long categoryId) {
         Location location = locationRepository.findById(locationId).orElseThrow(() -> new LocationNotFoundException(locationId));
-        this.eventRepository.updateEvent(eventid, name, description, score, location);
+        Event event = eventRepository.findById(eventid).orElseThrow(() -> new LocationNotFoundException(eventid));
+        Optional<Category> category = categoryRepository.findById(categoryId);
+
+        event.setName(name);
+        event.setDescription(description);
+        event.setPopularityScore(score);
+        event.setLocation(location);
+        event.setCategory(category.get());
+
+        eventRepository.save(event);
     }
 
     @Override
     public void deleteEvent(Long eventid) {
         this.eventRepository.deleteById(eventid);
     }
+
 
 }

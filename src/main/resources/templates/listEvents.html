@@ -19,8 +19,15 @@
             margin-bottom: 15px;
         }
 
-        .event-item .edit-button, .event-item .delete-button {
-            margin-right: 10px;
+        /* Align buttons correctly */
+        .event-buttons {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px; /* Space between buttons */
+        }
+
+        .event-buttons .btn {
+            margin-bottom: 5px;
         }
 
         .add-event-button {
@@ -41,6 +48,29 @@
         .add-event-button:hover {
             background-color: #0056b3;
         }
+
+        .form-inline .form-group {
+            margin-right: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Ensure all search buttons are the same style */
+        .search-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -50,30 +80,42 @@
     </header>
 
     <main>
-        <div th:if="${error}" style="color: red;font-weight: bold">
+        <div th:if="${hasError}" style="color: red;font-weight: bold">
             <p th:text="${error}"></p>
         </div>
         <!-- Search Filters -->
         <div class="row mb-4">
             <div class="col-12">
-                <form th:action="@{/test}" th:method="GET" class="form-inline">
-                    <button type="submit" class="btn btn-secondary">Reset List</button>
-                </form>
-
+                <!-- Search by Text -->
                 <form th:action="@{/test/searchByText}" th:method="POST" class="form-inline mt-3">
                     <div class="form-group mr-2">
                         <label for="text" class="mr-2">Enter the text to filter Events by:</label>
                         <input type="text" id="text" name="text" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-primary">Search by Text</button>
+                    <button type="submit" class="search-btn">Search by Text</button>
                 </form>
 
+                <!-- Search by Rating -->
                 <form th:action="@{/test/searchByRating}" th:method="POST" class="form-inline mt-3">
                     <div class="form-group mr-2">
                         <label for="rating" class="mr-2">Enter the rating to filter Events by:</label>
-                        <input type="number" id="rating" name="rating" class="form-control">
+                        <input type="number" id="rating" name="rating" class="form-control" required step="0.5"/>
+
                     </div>
-                    <button type="submit" class="btn btn-primary">Search by Rating</button>
+                    <button type="submit" class="search-btn">Search by Rating</button>
+                </form>
+
+                <!-- Search by Location -->
+                <form th:action="@{events/location}" th:method="post" class="form-inline mt-3">
+                    <div class="form-group">
+                        <label for="locationId" class="mr-2">Search Events by Location:</label>
+                        <select id="locationId" name="locationId" class="form-control">
+                            <option value="" disabled>Select a location</option>
+                            <option th:each="location : ${locations}" th:value="${location.id}"
+                                    th:text="${location.name}"></option>
+                        </select>
+                    </div>
+                    <button type="submit" class="search-btn">Search by Location</button>
                 </form>
             </div>
         </div>
@@ -102,18 +144,17 @@
             <h3>All events:</h3>
             <ul class="list-group mb-4">
                 <li th:each="event : ${events}" class="list-group-item event-item">
-                    <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()}"></span>
-                    <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-info btn-sm float-right ml-2">Edit</a>
-                    <a th:href="@{events/delete/{id}(id=${event.id})}"
-                       class="btn btn-danger btn-sm float-right">Delete</a>
-                    <form th:action="@{events/like/{id}(id=${event.id})}" method="POST" class="form-inline float-right ml-2">
-                        <button type="submit" class="btn btn-success btn-sm"
-                        th:disabled="${event.disabled}">Like</button>
-                    </form>
+                    <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()} +', Category: ' +  ${event.getCategory().getName()}"></span>
 
-                    <div style="display: block">
-
-                        <form th:action="@{/eventBooking/confirm}" method="POST" class="form-inline float-right ml-2">
+                    <!-- Align buttons for each event -->
+                    <div class="event-buttons">
+                        <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-info btn-sm">Edit</a>
+                        <a th:href="@{events/delete/{id}(id=${event.id})}" class="btn btn-danger btn-sm">Delete</a>
+                        <form th:action="@{events/like/{id}(id=${event.id})}" method="POST" class="form-inline">
+                            <button type="submit" class="btn btn-success btn-sm" th:disabled="${event.disabled}">Like
+                            </button>
+                        </form>
+                        <form th:action="@{/eventBooking/confirm}" method="POST" class="form-inline">
                             <div class="form-group mr-2">
                                 <label for="numTickets-${event.id}" class="mr-2">Tickets:</label>
                                 <input type="number" id="numTickets-${event.id}" name="numTickets" class="form-control"

@@ -10,10 +10,12 @@ public interface EventService {
 
     List<Event> searchEvent(String text);
 
-    Optional<Event> save(String name, String description, Double score, Long locationId);
+    Optional<Event> save(String name, String description, Double score, Long locationId, Long categoryId);
 
     Optional<Event> findById(Long id);
-    void updateEvent(Long eventid,String name, String description, Double score, Long locationId);
+
+    void updateEvent(Long eventid, String name, String description, Double score, Long locationId, Long categoryId);
+
     void deleteEvent(Long eventid);
 
 }

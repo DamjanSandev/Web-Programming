@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events By Location</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #007bff;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .list-group-item {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            padding: 15px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            font-size: 16px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .back-btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:if="${events}">
+        <h3>All Events:</h3>
+        <ul class="list-group">
+            <li th:each="event : ${events}" class="list-group-item">
+                <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Back to Events button -->
+    <div class="back-btn-container">
+        <a href="/events" class="btn btn-secondary">Back to Events</a>
+    </div>
+</div>
+
+</body>
+</html>

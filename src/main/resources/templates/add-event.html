@@ -24,16 +24,16 @@
                 <input type="text" id="name" name="name" th:value="${event?.name}" class="form-control" required />
             </div>
 
+            <label for="description">Event Description:</label>
             <!-- Event Description -->
             <div class="form-group">
-                <label for="description">Event Description:</label>
                 <textarea id="description" name="description" class="form-control" required th:text="${event?.description}"></textarea>
             </div>
 
             <!-- Popularity Score -->
             <div class="form-group">
                 <label for="popularityScore">Popularity Score:</label>
-                <input type="number" id="popularityScore" name="popularityScore" th:value="${event?.popularityScore}" class="form-control" required />
+                <input type="number" id="popularityScore" name="popularityScore" th:value="${event?.popularityScore}" class="form-control" required step="0.5" />
             </div>
 
             <!-- Select Location -->
@@ -42,6 +42,15 @@
                 <select id="locationId" name="locationId" class="form-control">
                     <option value="" disabled>Select a location</option>
                     <option th:each="location : ${locations}" th:value="${location?.id}" th:text="${location?.name}">
+                    </option>
+                </select>
+            </div>
+           <!-- Select Category -->
+            <div class="form-group">
+                <label for="categoryId">Select Location:</label>
+                <select id="categoryId" name="categoryId" class="form-control">
+                    <option value="" disabled>Select a category</option>
+                    <option th:each="category : ${categories}" th:value="${category?.id}" th:text="${category?.name}">
                     </option>
                 </select>
             </div>
