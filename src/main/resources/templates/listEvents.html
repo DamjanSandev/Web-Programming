@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -145,11 +145,14 @@
             <ul class="list-group mb-4">
                 <li th:each="event : ${events}" class="list-group-item event-item">
                     <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()} +', Category: ' +  ${event.getCategory().getName()}"></span>
-
                     <!-- Align buttons for each event -->
                     <div class="event-buttons">
-                        <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-info btn-sm">Edit</a>
-                        <a th:href="@{events/delete/{id}(id=${event.id})}" class="btn btn-danger btn-sm">Delete</a>
+                        <th:block sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-info btn-sm">Edit</a>
+                        </th:block>
+                        <th:block sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{events/delete/{id}(id=${event.id})}" class="btn btn-danger btn-sm">Delete</a>
+                        </th:block>
                         <form th:action="@{events/like/{id}(id=${event.id})}" method="POST" class="form-inline">
                             <button type="submit" class="btn btn-success btn-sm" th:disabled="${event.disabled}">Like
                             </button>
@@ -170,7 +173,9 @@
     </main>
 
     <!-- Add Event Button -->
-    <a href="/events/addEvent" class="add-event-button">Add Event</a>
+    <th:block sec:authorize="hasRole('ADMIN')">
+        <a href="/events/addEvent" class="add-event-button">Add Event</a>
+    </th:block>
 </div>
 
 <!-- Link to Bootstrap JS (with dependencies) -->
