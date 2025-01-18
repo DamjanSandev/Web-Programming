@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking - Confirmation</title>
+    <title>Booking Confirmation</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         body {
@@ -78,32 +78,44 @@
 <body>
 <section>
     <header>
-        <h1>Event Booking - Booking Confirmation</h1>
+        <h1>Event Booking - Confirmation</h1>
     </header>
 
-    <table class="table table-bordered">
-        <tr>
-            <th colspan="2">Your Booking Status</th>
-        </tr>
-        <tr>
-            <td><b>Attendee Name</b></td>
-            <td>Petko Petkov</td>
-        </tr>
-        <tr>
-            <td><b>Client IP Address</b></td>
-            <td>127.0.0.1</td>
-        </tr>
-        <tr>
-            <td><b>Booking for Event</b></td>
-            <td th:text="${eventName}">Event Name Here</td>
-        </tr>
-        <tr>
-            <td><b>Number of Tickets</b></td>
-            <td th:text="${numTickets}">1</td>
-        </tr>
-    </table>
+    <div th:if="${bookings != null && !bookings.isEmpty()}">
+        <table th:each="booking : ${bookings}" class="table table-bordered">
+            <tr>
+                <th colspan="2">Booking Details</th>
+            </tr>
 
-    <div class="button-container">
+            <!-- Iterating through bookings once, wrapping all rows inside a single tr -->
+            <tr >
+                <td><b>Attendee Name</b></td>
+                <td th:text="${booking.getAttendeeName()}"></td>
+            </tr>
+            <tr>
+                <td><b>Client IP Address</b></td>
+                <td th:text="${booking.getAttendeeAddress()}"></td>
+            </tr>
+            <tr >
+                <td><b>Event</b></td>
+                <td th:text="${booking.getEventName()}"></td>
+            </tr>
+            <tr>
+                <td><b>Number of Tickets</b></td>
+                <td th:text="${booking.getNumberOfTickets()}"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <hr>
+                    <a href="/events" class="back-btn">Back to Events</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:if="${bookings == null || bookings.isEmpty()}">
+        <p>No bookings found.</p>
         <a href="/events" class="back-btn">Back to Events</a>
     </div>
 </section>

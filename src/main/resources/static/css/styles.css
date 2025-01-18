@@ -1,0 +1,371 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container Styles */
+.container {
+    max-width: 90%;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+
+/* Search Form Styling */
+.search-form {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-form select {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    width: 250px;
+}
+
+.search-form button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-form button:hover {
+    background-color: #218838;
+}
+
+/* Event List Container (Grid Layout) */
+.event-list-container .row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* Ensures 3 columns per row */
+    gap: 30px;
+    margin-top: 30px;
+    grid-gap: 5rem;
+}
+
+/* Ensure the event items fill the space */
+.event-item {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 20px;
+    border: 1px solid #f1f1f1;
+    overflow: hidden;
+    width: 100%; /* Ensure full width for each grid item */
+}
+
+.event-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Event Title */
+.event-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #333;
+}
+.available{
+    margin-left: 10px;
+}
+
+.event-description {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    word-wrap: break-word; /* Ensure long words break to fit */
+    overflow-wrap: break-word; /* Support older browsers */
+    text-overflow: ellipsis; /* Truncate overflowed text with ellipsis */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Show up to 3 lines of text */
+    -webkit-box-orient: vertical;
+    height: 4.5rem; /* Adjust to match the number of lines */
+    overflow: hidden;
+}
+
+/* Event Info (Location, Rating,Category) */
+.event-info {
+    font-size: 0.95rem;
+    color: #495057;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.event-info div {
+    margin-bottom: 10px;
+    flex: 1 1 100%;
+}
+
+.event-info span {
+    font-weight: 600;
+}
+
+/* Ensure divs inside event-info are neatly aligned */
+.event-info span:first-child {
+    margin-right: 5px; /* Small margin between label and value */
+}
+
+.event-info div span {
+    color: #007bff; /* Make the values stand out */
+}
+
+/* Apply text ellipsis for event-info when values are long */
+.event-info div span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Event Booking Form */
+.event-buttons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-buttons .form-group {
+    margin-bottom: 15px;
+}
+
+.event-buttons input {
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+}
+
+.event-buttons button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.event-buttons button:hover {
+    background-color: #0056b3;
+}
+
+/* Admin Actions */
+.admin-actions a {
+    margin-right: 10px;
+    font-size: 14px;
+    padding: 12px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.admin-actions .btn-warning {
+    background-color: #ffc107;
+    color: white;
+}
+
+.admin-actions .btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.admin-actions .btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.admin-actions .btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Pagination Styles */
+
+.pagination-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* Align pagination on the left and results per page on the right */
+    margin-top: 30px;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination .page-item {
+    margin-right: 5px;
+}
+
+.pagination .page-item a {
+    border: 1px solid #ced4da;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #007bff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+}
+
+.pagination .page-item a:hover {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.1);
+}
+
+.pagination .page-item.active a {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    font-weight: bold;
+}
+
+.pagination .page-item.disabled a {
+    background-color: #f1f1f1;
+    color: #ddd;
+    cursor: not-allowed;
+    border-color: #f1f1f1;
+    pointer-events: none;
+}
+
+.pagination .page-item:last-child {
+    margin-right: 0;
+}
+
+/* Styling for "Results by page" section */
+.d-flex {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.results-select {
+    border-radius: 5px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+    width: 100px;
+}
+
+.results-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.results-select option {
+    font-size: 1rem;
+}
+
+/* Styling for the Results Text */
+.results-text {
+    margin-right: 10px;
+    color: #495057;
+    font-size: 1rem;
+}
+
+/* Margin and padding for results container */
+.ms-1 {
+    margin-left: 0.25rem;
+}
+
+.me-1 {
+    margin-right: 0.25rem;
+}
+
+
+/* Header Styling */
+.header {
+    background-color: #f2f2f2; /* Smooth light gray background */
+    padding: 20px;
+    color: #333;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header .title {
+    font-size: 1.8em;
+    font-weight: bold;
+    text-align: center;
+    width: 100%; /* Center the title */
+}
+
+.header .username {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right; /* Align username to the right */
+}
+
+.header .btn {
+    margin-left: 15px;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1em;
+}
+
+.header .btn-logout {
+    background-color: #dc3545;
+    color: white;
+}
+
+.header .btn-logout:hover {
+    background-color: #c82333;
+}
+
+.header .btn-add-event {
+    background-color: #28a745;
+    color: white;
+}
+
+.header .btn-add-event:hover {
+    background-color: #218838;
+}
+
+.header .btn-search {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    margin-left: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.header .btn-search:hover {
+    background-color: #0056b3;
+}
+
+.header .text-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}

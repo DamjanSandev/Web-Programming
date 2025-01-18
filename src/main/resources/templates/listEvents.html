@@ -1,184 +1,85 @@
 <!doctype html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Booking Page</title>
-    <!-- Link to Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            margin-top: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-        }
-
-        .event-item {
-            margin-bottom: 15px;
-        }
-
-        /* Align buttons correctly */
-        .event-buttons {
-            display: flex;
-            justify-content: flex-start;
-            gap: 10px; /* Space between buttons */
-        }
-
-        .event-buttons .btn {
-            margin-bottom: 5px;
-        }
-
-        .add-event-button {
-            width: 100%;
-            padding: 15px;
-            background-color: #007bff;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            align-content: center;
-            margin-top: 30px;
-            transition: background-color 0.3s ease;
-        }
-
-        .add-event-button:hover {
-            background-color: #0056b3;
-        }
-
-        .form-inline .form-group {
-            margin-right: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        /* Ensure all search buttons are the same style */
-        .search-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            font-size: 14px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Event Booking</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
+
+<!-- Include header from header.html -->
+<header th:replace="~{header :: header}"></header>
+
 <div class="container">
-    <header class="text-center mb-4">
-        <h1>Welcome to our Event Booking App</h1>
-    </header>
+    <!-- Search Form -->
+    <div class="search-form">
+        <form th:action="@{/events}" method="GET">
+            <select id="searchByCategory" name="searchByCategory" class="form-control">
+                <option value="">Select Category</option>
+                <option th:each="category : ${categories}" th:value="${category.getId()}"
+                        th:text="${category.getName()}"></option>
+            </select>
+            <select id="searchByLocation" name="searchByLocation" class="form-control">
+                <option value="">Select Location</option>
+                <option th:each="loc : ${locations}" th:value="${loc.getId()}" th:text="${loc.getName()}"></option>
+            </select>
+            <button type="submit" class="btn">Search</button>
+        </form>
+    </div>
 
-    <main>
-        <div th:if="${hasError}" style="color: red;font-weight: bold">
-            <p th:text="${error}"></p>
-        </div>
-        <!-- Search Filters -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <!-- Search by Text -->
-                <form th:action="@{/test/searchByText}" th:method="POST" class="form-inline mt-3">
-                    <div class="form-group mr-2">
-                        <label for="text" class="mr-2">Enter the text to filter Events by:</label>
-                        <input type="text" id="text" name="text" class="form-control">
+    <div th:if="${page}" class="event-list-container">
+        <h3>Upcoming Events:</h3>
+        <div class="row">
+            <div th:each="event : ${page.getContent()}" class="col-12 col-md-6 col-lg-4">
+                <div class="event-item">
+                    <!-- Event Title -->
+                    <div class="event-title" th:text="${event.name}"></div>
+
+                    <!-- Event Description -->
+                    <div class="event-description" th:text="${event.description}"></div>
+
+                    <!-- Event Info -->
+                    <div class="event-info">
+                        <div><span>Rating:</span> <span th:text="${event.popularityScore}"></span></div>
+                        <div><span>Location:</span> <span th:text="${event.getLocation().name}"></span></div>
+                        <div><span>Category:</span> <span th:text="${event.getCategory().name}"></span></div>
                     </div>
-                    <button type="submit" class="search-btn">Search by Text</button>
-                </form>
 
-                <!-- Search by Rating -->
-                <form th:action="@{/test/searchByRating}" th:method="POST" class="form-inline mt-3">
-                    <div class="form-group mr-2">
-                        <label for="rating" class="mr-2">Enter the rating to filter Events by:</label>
-                        <input type="number" id="rating" name="rating" class="form-control" required step="0.5"/>
-
+                    <!-- Event Booking Form -->
+                    <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" class="event-buttons">
+                        <form th:action="@{/eventBooking/book}" method="POST">
+                            <input type="hidden" name="eventName" th:value="${event.name}">
+                            <div class="form-group">
+                                <label for="attName">Attendee Name:</label>
+                                <input type="text" id="attName" name="attName" class="form-control"
+                                       placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="numTickets">Tickets:</label>
+                                <input type="number" id="numTickets" name="numTickets" class="form-control" min="1"
+                                       max="10" required>
+                                <span class="available" th:text="'  Available: ' + ${event.numTickets}"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Book Now</button>
+                        </form>
                     </div>
-                    <button type="submit" class="search-btn">Search by Rating</button>
-                </form>
 
-                <!-- Search by Location -->
-                <form th:action="@{events/location}" th:method="post" class="form-inline mt-3">
-                    <div class="form-group">
-                        <label for="locationId" class="mr-2">Search Events by Location:</label>
-                        <select id="locationId" name="locationId" class="form-control">
-                            <option value="" disabled>Select a location</option>
-                            <option th:each="location : ${locations}" th:value="${location.id}"
-                                    th:text="${location.name}"></option>
-                        </select>
+                    <!-- Admin Actions -->
+                    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="admin-actions">
+                        <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/events/delete/{id}(id=${event.id})}" class="btn btn-danger btn-sm"
+                           th:onclick="return confirm('Are you sure you want to delete this event?')">Delete</a>
                     </div>
-                    <button type="submit" class="search-btn">Search by Location</button>
-                </form>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Display search results -->
-        <div th:if="${textSearchResults}">
-            <h3>Filtered Events by Text:</h3>
-            <ul class="list-group mb-4">
-                <li th:each="event : ${textSearchResults}" class="list-group-item">
-                    <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()}"></span>
-                </li>
-            </ul>
-        </div>
-
-        <div th:if="${ratingSearchResults}">
-            <h3>Filtered Events by Rating:</h3>
-            <ul class="list-group mb-4">
-                <li th:each="event : ${ratingSearchResults}" class="list-group-item">
-                    <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()}"></span>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Display all events -->
-        <div th:if="${events}">
-            <h3>All events:</h3>
-            <ul class="list-group mb-4">
-                <li th:each="event : ${events}" class="list-group-item event-item">
-                    <span th:text="'Name: ' + ${event.name} + ', Description: ' + ${event.description} + ', Rating: ' + ${event.popularityScore} + ', Location: ' + ${event.getLocation().getName()} +', Category: ' +  ${event.getCategory().getName()}"></span>
-                    <!-- Align buttons for each event -->
-                    <div class="event-buttons">
-                        <th:block sec:authorize="hasRole('ADMIN')">
-                            <a th:href="@{/events/addEvent/{id}(id=${event.id})}" class="btn btn-info btn-sm">Edit</a>
-                        </th:block>
-                        <th:block sec:authorize="hasRole('ADMIN')">
-                            <a th:href="@{events/delete/{id}(id=${event.id})}" class="btn btn-danger btn-sm">Delete</a>
-                        </th:block>
-                        <form th:action="@{events/like/{id}(id=${event.id})}" method="POST" class="form-inline">
-                            <button type="submit" class="btn btn-success btn-sm" th:disabled="${event.disabled}">Like
-                            </button>
-                        </form>
-                        <form th:action="@{/eventBooking/confirm}" method="POST" class="form-inline">
-                            <div class="form-group mr-2">
-                                <label for="numTickets-${event.id}" class="mr-2">Tickets:</label>
-                                <input type="number" id="numTickets-${event.id}" name="numTickets" class="form-control"
-                                       min="1" max="10">
-                            </div>
-                            <input type="hidden" name="eventName" th:value="${event.name}">
-                            <button type="submit" class="btn btn-success btn-sm">Book</button>
-                        </form>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </main>
-
-    <!-- Add Event Button -->
-    <th:block sec:authorize="hasRole('ADMIN')">
-        <a href="/events/addEvent" class="add-event-button">Add Event</a>
-    </th:block>
+    <!-- Pagination Section -->
+    <div th:include="~{paging :: pageSection(page=${page})}"></div>
 </div>
 
-<!-- Link to Bootstrap JS (with dependencies) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

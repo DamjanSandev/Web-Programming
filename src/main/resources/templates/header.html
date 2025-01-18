@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title></title>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div>
+            <span class="title">Welcome to Our Event Booking App</span><br>
+            <span class="username" th:text="'Hello, ' + ${#authentication.name}"></span>
+        </div>
+
+        <div class="text-right">
+            <!-- Conditional button for Add Event (only visible for admin) -->
+            <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                <a href="/events/addEvent" class="btn btn-add-event">Add New Event</a>
+            </div>
+
+            <a th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
+               href="/eventBooking" class="btn btn-add-event">Show Bookings</a>
+
+            <!-- Logout button -->
+            <a href="/logout" class="btn btn-logout">Logout</a>
+        </div>
+    </div>
+</header>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
