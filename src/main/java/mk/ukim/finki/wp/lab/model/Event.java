@@ -18,16 +18,20 @@ public class Event {
     @ManyToOne
     private Category category;
     private boolean disabled;
+    public int numTickets;
 
     public Event() {
     }
 
-    public Event(String name, String description, double popularityScore, Location location, Category category) {
+    public Event(String name, String description, double popularityScore, Location location, Category category, int numTickets) {
         this.name = name;
         this.description = description;
         this.popularityScore = popularityScore;
         this.location = location;
         this.category = category;
         this.disabled = false;
+        this.numTickets = numTickets;
     }
+
+
 }
