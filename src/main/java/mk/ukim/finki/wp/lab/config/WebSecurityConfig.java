@@ -41,8 +41,11 @@ public class WebSecurityConfig {
                         .authenticated()
                 )
                 .formLogin((form) -> form
-                        .defaultSuccessUrl("/events", true)
+                        .loginPage("/login")
                         .permitAll()
+                        .failureUrl("/login?error=BadCredentials")
+                        .defaultSuccessUrl("/events", true)
+
                 )
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
